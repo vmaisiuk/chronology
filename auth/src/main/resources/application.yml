@@ -1,0 +1,27 @@
+spring:
+  security:
+    basic:
+      path: /swagger-ui.html
+      enabled: true
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: mydatabase
+      username: "rootuser"
+      password: "rootpass"
+      authentication-database: "admin"
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui-custom.html
+
+
+security:
+  basic:
+    path: /swagger-ui.html
+    enabled: true
+
+jwt:
+  secret: my32CharacterUltraSecureAndUltraLongSecretKey
+  expiration: 86400000
