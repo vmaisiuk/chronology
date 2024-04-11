@@ -6,6 +6,7 @@ import com.andersen.chronology.auth.mapper.UserMapper;
 import com.andersen.chronology.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,7 +18,7 @@ public class UserFacadeImpl implements UserFacade {
     private final UserMapper userMapper;
 
     @Override
-    public void registerUser(UserRegistrationRequest request) {
-        userService.registerUser(userMapper.toUserEntity(request));
+    public UserDetails registerUser(UserRegistrationRequest request) {
+        return userService.registerUser(userMapper.toUserEntity(request));
     }
 }

@@ -11,11 +11,9 @@ import lombok.Setter;
 public class UserRegistrationRequest {
 
     @NotBlank
-    private String firstName;
-    @NotBlank
-    private String lastName;
-    @NotBlank
-    private String email;
+    private String username;
     @NotBlank
     private String password;
+    @NotBlank
+    private String name;
 }

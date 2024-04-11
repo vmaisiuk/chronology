@@ -5,6 +5,7 @@ import com.andersen.chronology.auth.repository.UserRepository;
 import com.andersen.chronology.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,8 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public void registerUser(UserEntity request) {
+    public UserDetails registerUser(UserEntity request) {
         request.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
-        userRepository.save(request);
+        return userRepository.save(request);
     }
 }

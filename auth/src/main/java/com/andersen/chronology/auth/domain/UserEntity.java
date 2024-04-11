@@ -9,8 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,19 +21,23 @@ public class UserEntity implements UserDetails {
 
     @Id
     private String id;
-    private String firstName;
-    private String lastName;
-    private String email;
+
+    private String username;
     private String password;
+    private String name;
+    private boolean active;
+    private String googleName;
+    private String googleUsername;
+    private Set<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return roles;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
@@ -53,6 +57,6 @@ public class UserEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return active;
     }
 }

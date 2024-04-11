@@ -1,8 +1,9 @@
 package com.andersen.chronology.auth.facade;
 
 import com.andersen.chronology.auth.dto.UserRegistrationRequest;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserFacade {
 
-    void registerUser(UserRegistrationRequest request);
+    UserDetails registerUser(UserRegistrationRequest request);
 }
