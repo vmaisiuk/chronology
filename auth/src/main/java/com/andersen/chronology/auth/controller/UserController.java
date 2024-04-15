@@ -8,10 +8,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,13 +40,15 @@ public class UserController {
     }
 
     @PostMapping("/sign-in")
-    public String loginUser(@ModelAttribute LoginRequest loginRequest) {
+    public String loginUser(@ModelAttribute LoginRequest loginRequest, Model model) {
         try {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
             if (userDetails == null) {
                 throw new BadCredentialsException("Invalid username or password");
             }
-
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            model.addAttribute("authentication", authentication);
             return "home";
         } catch (AuthenticationException exception) {
             throw new BadCredentialsException("Invalid username or password");

@@ -2,7 +2,6 @@ package com.andersen.chronology.auth.config;
 
 import com.andersen.chronology.auth.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.HttpHeaders;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,18 +12,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
@@ -56,17 +52,17 @@ public class SecurityConfig {
                                 .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .loginProcessingUrl("/api/chronology/sign-in")
                         .defaultSuccessUrl("/index", true)
                         .permitAll()
-                        .successHandler((request, response, authentication) -> response.addHeader(HttpHeaders.AUTHORIZATION, jwtUtil.generateToken((UserDetails) authentication.getPrincipal())))
                 )
                 .httpBasic(Customizer.withDefaults())
                 .oauth2Login(oauth2Login -> oauth2Login
                         .loginPage("/login")
+                        .defaultSuccessUrl("/index", true)
+                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
+                                .oidcUserService(googleUserService()))
                         .permitAll()
                 )
-                .oauth2Client(Customizer.withDefaults())
                 .logout(logout -> logout
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
@@ -75,7 +71,6 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login?logout")
                 )
                 .csrf(AbstractHttpConfigurer::disable)
-                .authenticationManager(customAuthenticationManager(http))
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
 
@@ -83,25 +78,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        return new InMemoryClientRegistrationRepository(this.googleClientRegistration());
-    }
+    public OidcUserService googleUserService() {
+        Set<String> googleScopes = new HashSet<>();
+        googleScopes.add("https://www.googleapis.com/auth/userinfo.email");
+        googleScopes.add("https://www.googleapis.com/auth/userinfo.profile");
+        googleScopes.add("openid");
 
-    private ClientRegistration googleClientRegistration() {
-        return ClientRegistration.withRegistrationId("google")
-                .clientId("")
-                .clientSecret("")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
-                .scope("openid", "profile", "email", "address", "phone")
-                .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
-                .tokenUri("https://www.googleapis.com/oauth2/v4/token")
-                .userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
-                .userNameAttributeName(IdTokenClaimNames.SUB)
-                .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
-                .clientName("Google")
-                .build();
+        OidcUserService googleUserService = new OidcUserService();
+        googleUserService.setAccessibleScopes(googleScopes);
+
+        return googleUserService;
     }
 
 

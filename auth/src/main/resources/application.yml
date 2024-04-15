@@ -8,16 +8,6 @@ spring:
           google:
             client-id: ""
             client-secret: ""
-            redirect-uri: "{baseUrl}/login/oauth2/code/google"
-            scope:
-              - https://www.googleapis.com/auth/userinfo.email
-              - https://www.googleapis.com/auth/userinfo.profile
-              - openid
-        provider:
-          google:
-            authorization-uri: "https://accounts.google.com/o/oauth2/auth"
-            token-uri: "https://www.googleapis.com/oauth2/v3/token"
-            user-info-uri: "https://www.googleapis.com/oauth2/v3/userinfo"
   data:
     mongodb:
       host: localhost
@@ -34,7 +24,3 @@ springdoc:
 jwt:
   secret: my32CharacterUltraSecureAndUltraLongSecretKey
   expiration: 86400000
-
-logging:
-  level:
-    org.springframework: DEBUG

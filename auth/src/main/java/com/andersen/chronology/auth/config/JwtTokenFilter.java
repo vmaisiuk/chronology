@@ -35,14 +35,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
         if (!jwtTokenUtil.isTokenValid(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Get user identity and set it on the spring security context
         UserDetails userDetails = userRepo
                 .findByUsername(jwtTokenUtil.extractUsername(token))
                 .orElse(null);
