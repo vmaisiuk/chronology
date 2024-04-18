@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0.1.0-1
+      author: v.maisiuk@andersenlab.com
+
+  - changeSet:
+      id: 0.1.0-2 create trip table
+      author: v.maisiuk@andersenlab.com
+      changes:
+        - createTable:
+            tableName: trip
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: city
+                  type: varchar
+              - column:
+                  name: country
+                  type: varchar
+              - column:
+                  name: date
+                  type: timestamp
+              - column:
+                  name: trip_company
+                  type: varchar
+              - column:
+                  name: user_name
+                  type: varchar
+        - addUniqueConstraint:
+            tableName: trip
+            columnNames: city, user_name, date

@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+
+  postgresql_trips_service:
+    container_name: postgresql_trips_service
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=trips
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "10045:5432"
+    volumes:
+      - db_trips:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  db_trips:
+    driver: local
+  mongodb_data_container:
