@@ -9,3 +9,8 @@ spring:
 springdoc:
   swagger-ui:
     path: /swagger-ui-custom.html
+
+com:
+  unsplash:
+    url: https://api.unsplash.com/search/photos
+    accessKey: h5QwkyV-I7MJpZV3NMVCU_mEjZol1AvzeyrRu1ngRr0
