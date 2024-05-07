@@ -1,0 +1,24 @@
+spring:
+  mail:
+    host: andersen.com
+    port: 587
+    username: testnotification@andersen.com
+    password: 'password'
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+com:
+  andersen:
+    chronology:
+      notification:
+        notification-queue-name: notification-queue-name
+        notification-status-queue-name: notification-status-queue-name
+      firebase:
+        path: src/main/resources/firebase
+      calendar:
+        path: src/main/resources/calendar
