@@ -1,4 +1,4 @@
-package com.andersen.chronology.notification.dto;
+package com.andersen.chronology.rabbit.dto.notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,4 +11,5 @@ public class NotificationSendResponse {
 
     private Long notificationId;
     private String errorMessage;
+    private String calendarEventId;
 }

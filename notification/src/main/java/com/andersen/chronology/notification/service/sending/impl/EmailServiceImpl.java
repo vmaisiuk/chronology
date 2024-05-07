@@ -1,9 +1,9 @@
 package com.andersen.chronology.notification.service.sending.impl;
 
-import com.andersen.chronology.notification.dto.NotificationSendRequest;
-import com.andersen.chronology.notification.dto.NotificationSendResponse;
 import com.andersen.chronology.notification.properties.EmailProperty;
 import com.andersen.chronology.notification.service.sending.EmailService;
+import com.andersen.chronology.rabbit.dto.notification.NotificationSendRequest;
+import com.andersen.chronology.rabbit.dto.notification.NotificationSendResponse;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

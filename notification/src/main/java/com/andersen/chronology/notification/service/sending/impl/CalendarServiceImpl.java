@@ -1,8 +1,9 @@
 package com.andersen.chronology.notification.service.sending.impl;
 
-import com.andersen.chronology.notification.dto.NotificationSendRequest;
-import com.andersen.chronology.notification.dto.NotificationSendResponse;
+
 import com.andersen.chronology.notification.service.sending.CalendarService;
+import com.andersen.chronology.rabbit.dto.notification.NotificationSendRequest;
+import com.andersen.chronology.rabbit.dto.notification.NotificationSendResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -64,7 +65,8 @@ public class CalendarServiceImpl implements CalendarService {
 
         String calendarId = "primary";
         try {
-            service.events().insert(calendarId, event).execute();
+            Event execute = service.events().insert(calendarId, event).execute();
+            response.setCalendarEventId(execute.getId());
             log.info("Событие успешно добавлено в Google Календарь.");
         } catch (GoogleJsonResponseException e) {
             log.error("Ошибка при добавлении события: {}", e.getDetails().getMessage());

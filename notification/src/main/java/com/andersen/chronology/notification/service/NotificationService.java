@@ -1,6 +1,7 @@
 package com.andersen.chronology.notification.service;
 
-import com.andersen.chronology.notification.dto.NotificationSendRequest;
+
+import com.andersen.chronology.rabbit.dto.notification.NotificationSendRequest;
 
 public interface NotificationService {
 

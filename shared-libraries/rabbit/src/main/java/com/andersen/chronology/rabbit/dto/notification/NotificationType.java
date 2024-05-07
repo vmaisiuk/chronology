@@ -1,4 +1,4 @@
-package com.andersen.chronology.notification.dto;
+package com.andersen.chronology.rabbit.dto.notification;
 
 public enum NotificationType {
     CALENDAR,

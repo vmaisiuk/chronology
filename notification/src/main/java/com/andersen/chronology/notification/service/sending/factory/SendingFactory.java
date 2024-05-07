@@ -1,6 +1,6 @@
 package com.andersen.chronology.notification.service.sending.factory;
 
-import com.andersen.chronology.notification.dto.NotificationType;
+import com.andersen.chronology.rabbit.dto.notification.NotificationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

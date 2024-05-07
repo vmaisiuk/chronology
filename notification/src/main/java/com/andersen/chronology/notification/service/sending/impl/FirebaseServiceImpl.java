@@ -1,8 +1,8 @@
 package com.andersen.chronology.notification.service.sending.impl;
 
-import com.andersen.chronology.notification.dto.NotificationSendRequest;
-import com.andersen.chronology.notification.dto.NotificationSendResponse;
 import com.andersen.chronology.notification.service.sending.FirebaseService;
+import com.andersen.chronology.rabbit.dto.notification.NotificationSendRequest;
+import com.andersen.chronology.rabbit.dto.notification.NotificationSendResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;

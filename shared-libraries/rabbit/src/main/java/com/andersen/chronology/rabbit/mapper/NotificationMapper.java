@@ -1,8 +1,7 @@
-package com.andersen.chronology.notification.mapper;
+package com.andersen.chronology.rabbit.mapper;
 
-import com.andersen.chronology.notification.dto.NotificationSendRequest;
-import com.andersen.chronology.notification.dto.NotificationSendResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.client.Delivery;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.mapstruct.Mapper;
@@ -18,12 +17,12 @@ public abstract class NotificationMapper {
     private final ObjectMapper objectMapper;
 
     @SneakyThrows
-    public NotificationSendRequest toNotificationSendRequest(byte[] request) {
-        return objectMapper.readValue(request, NotificationSendRequest.class);
+    public <T> T toTargetType(Delivery delivery, Class<T> targetType) {
+        return objectMapper.readValue(delivery.getBody(), targetType);
     }
 
     @SneakyThrows
-    public byte[] toByteArray(NotificationSendResponse request) {
+    public byte[] toByteArray(Object request) {
         return objectMapper.writeValueAsBytes(request);
     }
 }
