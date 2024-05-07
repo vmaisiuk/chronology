@@ -1,13 +1,17 @@
 package com.andersen.chronology.trips.service.impl;
 
+import com.andersen.chronology.rabbit.dto.notification.NotificationSendResponse;
 import com.andersen.chronology.rabbit.dto.notification.NotificationType;
 import com.andersen.chronology.trips.domain.NotificationEntity;
 import com.andersen.chronology.trips.domain.NotificationStatus;
 import com.andersen.chronology.trips.domain.TripEntity;
+import com.andersen.chronology.trips.dto.events.SendPushNotificationEvent;
 import com.andersen.chronology.trips.repository.NotificationRepository;
 import com.andersen.chronology.trips.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -22,11 +26,38 @@ import java.util.Set;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
     public List<NotificationEntity> createNotifications(TripEntity trip) {
         return notificationRepository.saveAll(toNotifications(trip));
+    }
+
+    @Override
+    @Transactional
+    public void updateNotificationStatus(NotificationSendResponse response) {
+        notificationRepository.findById(response.getNotificationId()).ifPresent(notification -> {
+            if (StringUtils.isNotBlank(response.getErrorMessage())) {
+                notification.setStatus(NotificationStatus.FAILED);
+                notification.setErrorMessage(response.getErrorMessage());
+            } else {
+                notification.setStatus(NotificationStatus.SENT);
+            }
+            notification.setCalendarEventId(response.getCalendarEventId());
+            notificationRepository.save(notification);
+            checkNotificationsStatus(notification.getTripId());
+        });
+    }
+
+    private void checkNotificationsStatus(Long tripId) {
+        boolean isAllInFinalStatus = notificationRepository.findAllByTripId(tripId).stream()
+                .allMatch(notification -> NotificationStatus.getFinalStatuses().contains(notification.getStatus()));
+
+        if (isAllInFinalStatus) {
+            SendPushNotificationEvent customSpringEvent = new SendPushNotificationEvent(this);
+            applicationEventPublisher.publishEvent(customSpringEvent);
+        }
     }
 
     private List<NotificationEntity> toNotifications(TripEntity trip) {

@@ -42,4 +42,6 @@ public class NotificationEntity {
     private NotificationStatus status;
     @Column(name = "error_message")
     private String errorMessage;
+    @Column(name = "calendar_event_id")
+    private String calendarEventId;
 }

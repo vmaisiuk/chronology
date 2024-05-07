@@ -28,7 +28,7 @@ public class SendNewNotificationProducer {
     private Mono<OutboundMessage> getMessage(NotificationSendRequest request) {
         return Mono.just(new OutboundMessage(
                 "",
-                rabbitMQProperties.getNotificationStatusQueueName(), mapper.toByteArray(request)
+                rabbitMQProperties.getNotificationQueueName(), mapper.toByteArray(request)
         ));
     }
 }
