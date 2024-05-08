@@ -22,7 +22,7 @@ public class DeleteCalendarEventProducer {
 
     public void sendEvent(NotificationDeleteCalendarEventRequest request) {
         sender.send(getMessage(request))
-                .doOnError(e -> log.error("Can't send a message with id {}", request.getNotificationId()))
+                .doOnError(e -> log.error("Can't send a message"))
                 .subscribe();
     }
 
