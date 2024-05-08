@@ -2,21 +2,22 @@ package com.andersen.chronology.notification.service.sending.impl;
 
 
 import com.andersen.chronology.notification.service.sending.CalendarService;
+import com.andersen.chronology.rabbit.dto.notification.NotificationDeleteCalendarEventRequest;
 import com.andersen.chronology.rabbit.dto.notification.NotificationSendRequest;
 import com.andersen.chronology.rabbit.dto.notification.NotificationSendResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -34,15 +35,9 @@ public class CalendarServiceImpl implements CalendarService {
 
 
     @Override
-    @SneakyThrows
     public NotificationSendResponse send(NotificationSendRequest notification) {
         NotificationSendResponse response = new NotificationSendResponse();
         response.setNotificationId(notification.getNotificationId());
-        final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        Calendar service =
-                new Calendar.Builder(httpTransport, JSON_FACTORY, credential)
-                        .setApplicationName(APPLICATION_NAME)
-                        .build();
 
         Event event = new Event();
         event.setSummary(notification.getTitle());
@@ -65,13 +60,34 @@ public class CalendarServiceImpl implements CalendarService {
 
         String calendarId = "primary";
         try {
+            Calendar service = createCalendar();
             Event execute = service.events().insert(calendarId, event).execute();
             response.setCalendarEventId(execute.getId());
             log.info("Событие успешно добавлено в Google Календарь.");
-        } catch (GoogleJsonResponseException e) {
-            log.error("Ошибка при добавлении события: {}", e.getDetails().getMessage());
-            response.setErrorMessage(e.getDetails().getMessage());
+        } catch (IOException | GeneralSecurityException e) {
+            log.error("Ошибка при добавлении события: {}", e.getMessage());
+            response.setErrorMessage(e.getMessage());
         }
         return response;
+    }
+
+    @Override
+    public void deleteEvent(NotificationDeleteCalendarEventRequest notification) {
+        String calendarId = "primary";
+
+        try {
+            Calendar service = createCalendar();
+            service.events().delete(calendarId, notification.getCalendarEventId());
+            log.info("Событие успешно удалено в Google Календарь.");
+        } catch (IOException | GeneralSecurityException e) {
+            log.error("Ошибка при удалении события: {}", e.getMessage());
+        }
+    }
+
+    private Calendar createCalendar() throws IOException, GeneralSecurityException {
+        final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        return new Calendar.Builder(httpTransport, JSON_FACTORY, credential)
+                .setApplicationName(APPLICATION_NAME)
+                .build();
     }
 }

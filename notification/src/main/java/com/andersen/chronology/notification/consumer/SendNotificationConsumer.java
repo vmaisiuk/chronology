@@ -14,7 +14,7 @@ import reactor.rabbitmq.Receiver;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class RabbitMQConsumer {
+public class SendNotificationConsumer {
 
     private final NotificationService notificationService;
     private final RabbitMQProperties rabbitMQProperties;

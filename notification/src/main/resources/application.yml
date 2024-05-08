@@ -17,6 +17,7 @@ com:
     chronology:
       notification:
         notification-queue-name: notification-queue-name
+        delete-calendar-event-queue-name: delete-calendar-event-queue-name
         notification-status-queue-name: notification-status-queue-name
       firebase:
         path: src/main/resources/firebase

@@ -1,8 +1,8 @@
 package com.andersen.chronology.notification.service.sending.factory;
 
+import com.andersen.chronology.rabbit.dto.notification.NotificationChannel;
 import com.andersen.chronology.rabbit.dto.notification.NotificationSendRequest;
 import com.andersen.chronology.rabbit.dto.notification.NotificationSendResponse;
-import com.andersen.chronology.rabbit.dto.notification.NotificationType;
 import com.andersen.chronology.notification.service.sending.FirebaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +16,8 @@ public class FirebaseSender implements NotificationSender {
     private final FirebaseService firebaseService;
 
     @Override
-    public NotificationType getType() {
-        return NotificationType.PUSH;
+    public NotificationChannel getType() {
+        return NotificationChannel.PUSH;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.andersen.chronology.trips.domain;
 
-import com.andersen.chronology.rabbit.dto.notification.NotificationType;
+import com.andersen.chronology.rabbit.dto.notification.NotificationChannel;
 import com.andersen.chronology.trips.converter.NotificationTypeSetConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class NotificationEntity {
     private Long tripId;
     @Column(name = "channels")
     @Convert(converter = NotificationTypeSetConverter.class)
-    private Set<NotificationType> channels;
+    private Set<NotificationChannel> channels;
     @Column(name = "send_to")
     private String sendTo;
     @Column(name = "title")
@@ -40,6 +40,9 @@ public class NotificationEntity {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private NotificationStatus status;
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private NotificationType type;
     @Column(name = "error_message")
     private String errorMessage;
     @Column(name = "calendar_event_id")

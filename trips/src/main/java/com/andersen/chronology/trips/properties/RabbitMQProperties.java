@@ -10,5 +10,6 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQProperties {
 
     private String notificationQueueName;
+    private String deleteCalendarEventQueueName;
     private String notificationStatusQueueName;
 }

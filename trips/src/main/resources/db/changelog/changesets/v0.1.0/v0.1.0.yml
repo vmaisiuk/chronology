@@ -70,6 +70,9 @@ databaseChangeLog:
                   name: status
                   type: varchar
               - column:
+                  name: type
+                  type: varchar
+              - column:
                   name: error_message
                   type: varchar
               - column:

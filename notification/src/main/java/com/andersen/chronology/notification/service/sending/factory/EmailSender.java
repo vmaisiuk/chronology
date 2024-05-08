@@ -1,8 +1,8 @@
 package com.andersen.chronology.notification.service.sending.factory;
 
+import com.andersen.chronology.rabbit.dto.notification.NotificationChannel;
 import com.andersen.chronology.rabbit.dto.notification.NotificationSendRequest;
 import com.andersen.chronology.rabbit.dto.notification.NotificationSendResponse;
-import com.andersen.chronology.rabbit.dto.notification.NotificationType;
 import com.andersen.chronology.notification.service.sending.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +16,8 @@ public class EmailSender implements NotificationSender {
     private final EmailService emailService;
 
     @Override
-    public NotificationType getType() {
-        return NotificationType.EMAIL;
+    public NotificationChannel getType() {
+        return NotificationChannel.EMAIL;
     }
 
     @Override

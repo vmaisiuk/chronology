@@ -1,6 +1,6 @@
 package com.andersen.chronology.rabbit.dto.notification;
 
-public enum NotificationType {
+public enum NotificationChannel {
     CALENDAR,
     PUSH,
     EMAIL

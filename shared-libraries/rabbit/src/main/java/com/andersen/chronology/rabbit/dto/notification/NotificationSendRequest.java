@@ -13,7 +13,7 @@ import java.util.Set;
 public class NotificationSendRequest {
 
     private Long notificationId;
-    private Set<NotificationType> channels;
+    private Set<NotificationChannel> channels;
     private String sendTo;
     private String title;
     private String content;
