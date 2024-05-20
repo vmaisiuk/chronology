@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper
-public interface NotificationMapper {
+public interface TripNotificationMapper {
 
     @Mapping(target = "notificationId", source = "id")
     NotificationSendRequest toNotificationSendRequest(NotificationEntity notificationEntity);

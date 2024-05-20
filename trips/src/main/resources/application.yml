@@ -6,6 +6,12 @@ spring:
     username: postgres
     password: postgres
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: 'root'
+    password: 'rootpassword'
+
 springdoc:
   swagger-ui:
     path: /swagger-ui-custom.html
@@ -13,7 +19,7 @@ springdoc:
 com:
   unsplash:
     url: https://api.unsplash.com/search/photos
-    accessKey: h5QwkyV-I7MJpZV3NMVCU_mEjZol1AvzeyrRu1ngRr0
+    access-key: h5QwkyV-I7MJpZV3NMVCU_mEjZol1AvzeyrRu1ngRr0
 
   andersen:
     chronology:
@@ -21,3 +27,13 @@ com:
         notification-queue-name: notification-queue-name
         delete-calendar-event-queue-name: delete-calendar-event-queue-name
         notification-status-queue-name: notification-status-queue-name
+
+      jwt:
+        secret-key: my32CharacterUltraSecureAndUltraLongSecretKey
+        jwt-expiration: 86400000
+      auth:
+        account-details-path: 'http://localhost:8080/api/chronology'
+
+logging:
+  level:
+    org.springframework: DEBUG

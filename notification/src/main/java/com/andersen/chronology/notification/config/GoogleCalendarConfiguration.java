@@ -1,5 +1,6 @@
 package com.andersen.chronology.notification.config;
 
+import com.andersen.chronology.exception.commons.InternalException;
 import com.andersen.chronology.notification.properties.GoogleCalendarProperties;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.json.JsonFactory;
@@ -31,7 +32,7 @@ public class GoogleCalendarConfiguration {
             return GoogleCredential.fromStream(is)
                     .createScoped(SCOPES);
         } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
+            throw new InternalException(ioe.getMessage());
         }
     }
 }

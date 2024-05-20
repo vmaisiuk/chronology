@@ -1,6 +1,6 @@
 package com.andersen.chronology.auth.config;
 
-import com.andersen.chronology.auth.utils.JwtUtil;
+import com.andersen.chronology.security.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsService mongoAuthUserDetailService;
     private final JwtTokenFilter jwtTokenFilter;
     private final JwtUtil jwtUtil;
 
@@ -40,15 +40,17 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(rmr ->
                         rmr
-                                .requestMatchers(
+                                .requestMatchers(HttpMethod.GET,
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui-custom.html",
                                         "/registration",
+                                        "/login",
                                         "/login/oauth2/code/google").permitAll()
                                 .requestMatchers(HttpMethod.POST,
                                         "/api/chronology/register",
-                                        "/api/chronology/sign-in").permitAll()
+                                        "/api/chronology/sign-in",
+                                        "/api/chronology").permitAll()
                                 .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
@@ -94,7 +96,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager customAuthenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService)
+        authenticationManagerBuilder.userDetailsService(mongoAuthUserDetailService)
                 .passwordEncoder(bCryptPasswordEncoder());
         return authenticationManagerBuilder.build();
     }

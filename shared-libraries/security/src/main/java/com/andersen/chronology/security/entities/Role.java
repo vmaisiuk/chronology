@@ -1,4 +1,4 @@
-package com.andersen.chronology.auth.domain;
+package com.andersen.chronology.security.entities;
 
 import org.springframework.security.core.GrantedAuthority;
 

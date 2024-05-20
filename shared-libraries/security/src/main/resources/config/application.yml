@@ -1,0 +1,8 @@
+com:
+  andersen:
+    chronology:
+      jwt:
+        secret-key: my32CharacterUltraSecureAndUltraLongSecretKey
+        jwt-expiration: 86400000
+      auth:
+        account-details-path: 'http://localhost:8080/api/chronology'

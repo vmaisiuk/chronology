@@ -18,6 +18,9 @@
         <lombok.version>1.18.32</lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <library.rabbit.version>0.0.1-SNAPSHOT</library.rabbit.version>
+        <library.security.version>0.0.1-SNAPSHOT</library.security.version>
+        <library.logging.version>0.0.1-SNAPSHOT</library.logging.version>
+        <library.exception.version>0.0.1-SNAPSHOT</library.exception.version>
     </properties>
     <dependencies>
         <dependency>
@@ -79,6 +82,24 @@
             <groupId>com.andersen.chronology</groupId>
             <artifactId>rabbit</artifactId>
             <version>${library.rabbit.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.andersen.chronology</groupId>
+            <artifactId>security</artifactId>
+            <version>${library.security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.andersen.chronology</groupId>
+            <artifactId>logging</artifactId>
+            <version>${library.logging.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.andersen.chronology</groupId>
+            <artifactId>exception</artifactId>
+            <version>${library.exception.version}</version>
         </dependency>
     </dependencies>
 

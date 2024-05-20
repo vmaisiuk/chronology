@@ -6,7 +6,7 @@ import com.andersen.chronology.trips.dto.events.SendDeleteNotificationEvent;
 import com.andersen.chronology.trips.dto.events.SendNewNotificationEvent;
 import com.andersen.chronology.trips.dto.events.SendPushNotificationEvent;
 import com.andersen.chronology.trips.dto.events.SendUpdateNotificationEvent;
-import com.andersen.chronology.trips.mapper.NotificationMapper;
+import com.andersen.chronology.trips.mapper.TripNotificationMapper;
 import com.andersen.chronology.trips.producer.DeleteCalendarEventProducer;
 import com.andersen.chronology.trips.producer.SendNewNotificationProducer;
 import com.andersen.chronology.trips.service.EventService;
@@ -30,7 +30,7 @@ public class EventServiceImpl implements EventService {
     private final NotificationService notificationService;
     private final SendNewNotificationProducer sendNewNotificationProducer;
     private final DeleteCalendarEventProducer deleteCalendarEventProducer;
-    private final NotificationMapper notificationMapper;
+    private final TripNotificationMapper notificationMapper;
 
     @Async
     @Override

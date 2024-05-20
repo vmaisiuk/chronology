@@ -1,5 +1,7 @@
 package com.andersen.chronology.trips.facade.impl;
 
+import com.andersen.chronology.security.entities.AccountDetails;
+import com.andersen.chronology.security.utils.AuthUtils;
 import com.andersen.chronology.trips.domain.TripEntity;
 import com.andersen.chronology.trips.dto.*;
 import com.andersen.chronology.trips.dto.events.SendDeleteNotificationEvent;
@@ -62,14 +64,16 @@ public class TripFacadeImpl implements TripFacade {
 
     @Override
     public List<GetTripResponse> listTrip(LocalDate startDate, LocalDate endDate, String country, String companionName) {
-        return tripService.listTrip(startDate, endDate, country, companionName, "slavamoisuk@gmail.com").stream()
+        AccountDetails accountDetails = AuthUtils.getAccountDetails();
+        return tripService.listTrip(startDate, endDate, country, companionName, accountDetails.getUsername()).stream()
                 .map(tripMapper::toGetTripResponse)
                 .toList();
     }
 
     @Override
     public List<GetTripResponse> getAllTrips() {
-        return tripService.getAllTrips("slavamoisuk@gmail.com").stream()
+        AccountDetails accountDetails = AuthUtils.getAccountDetails();
+        return tripService.getAllTrips(accountDetails.getUsername()).stream()
                 .map(tripMapper::toGetTripResponse)
                 .toList();
     }

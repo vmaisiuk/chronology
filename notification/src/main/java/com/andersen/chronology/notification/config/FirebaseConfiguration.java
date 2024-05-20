@@ -1,5 +1,6 @@
 package com.andersen.chronology.notification.config;
 
+import com.andersen.chronology.exception.commons.InternalException;
 import com.andersen.chronology.notification.properties.FirebaseProperties;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -25,7 +26,7 @@ public class FirebaseConfiguration {
                 firebaseProperties.getPath() + "/firebase-service-account.json")) {
             return GoogleCredentials.fromStream(is);
         } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
+            throw new InternalException(ioe.getMessage());
         }
     }
 

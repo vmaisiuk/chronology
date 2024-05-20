@@ -2,6 +2,8 @@ package com.andersen.chronology.trips.service.impl;
 
 import com.andersen.chronology.rabbit.dto.notification.NotificationChannel;
 import com.andersen.chronology.rabbit.dto.notification.NotificationSendResponse;
+import com.andersen.chronology.security.entities.AccountDetails;
+import com.andersen.chronology.security.utils.AuthUtils;
 import com.andersen.chronology.trips.domain.NotificationEntity;
 import com.andersen.chronology.trips.domain.NotificationStatus;
 import com.andersen.chronology.trips.domain.NotificationType;
@@ -78,6 +80,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     private List<NotificationEntity> toNotifications(TripEntity trip) {
+        AccountDetails accountDetails = AuthUtils.getAccountDetails();
         Set<String> tripCompany = trip.getTripCompany();
 
         if (!CollectionUtils.isEmpty(tripCompany)) {
@@ -95,7 +98,7 @@ public class NotificationServiceImpl implements NotificationService {
 
                         entity.setSendTo(companion);
                         entity.setTitle(String.format("%s %s: %s", trip.getCountry(), trip.getCity(), trip.getDate()));
-                        entity.setContent(String.format("%s %s", "slavamoisuk@gmail.com", "invites you on a trip."));
+                        entity.setContent(String.format("%s %s", accountDetails.getUsername(), "invites you on a trip."));
                         entity.setDate(trip.getDate());
                         entity.setStatus(NotificationStatus.NEW);
                         entity.setType(NotificationType.SEND_NEW);
@@ -109,10 +112,11 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     private NotificationEntity createPushNotificationEntity() {
+        AccountDetails accountDetails = AuthUtils.getAccountDetails();
         NotificationEntity entity = new NotificationEntity();
 
         entity.setChannels(Set.of(NotificationChannel.PUSH));
-        entity.setSendTo("slavamoisuk@gmail.com");
+        entity.setSendTo(accountDetails.getToken());
         entity.setTitle("All invites sent to your companions.");
         entity.setContent("All invites sent to your companions.");
         entity.setStatus(NotificationStatus.NEW);
@@ -122,6 +126,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     private List<NotificationEntity> deleteNotification(TripEntity trip) {
+        AccountDetails accountDetails = AuthUtils.getAccountDetails();
         Set<String> tripCompany = trip.getTripCompany();
 
         if (!CollectionUtils.isEmpty(tripCompany)) {
@@ -133,7 +138,7 @@ public class NotificationServiceImpl implements NotificationService {
                         entity.setChannels(Set.of(NotificationChannel.EMAIL));
                         entity.setSendTo(companion);
                         entity.setTitle(String.format("%s %s: %s", trip.getCountry(), trip.getCity(), trip.getDate()));
-                        entity.setContent(String.format("%s %s", "slavamoisuk@gmail.com", "canceled this trip."));
+                        entity.setContent(String.format("%s %s", accountDetails.getUsername(), "canceled this trip."));
                         entity.setDate(trip.getDate());
                         entity.setStatus(NotificationStatus.NEW);
                         entity.setType(NotificationType.SEND_NEW);

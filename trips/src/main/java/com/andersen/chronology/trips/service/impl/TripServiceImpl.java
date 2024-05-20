@@ -1,6 +1,7 @@
 package com.andersen.chronology.trips.service.impl;
 
 import com.andersen.chronology.trips.domain.TripEntity;
+import com.andersen.chronology.trips.exception.TripNotFoundException;
 import com.andersen.chronology.trips.repository.TripRepository;
 import com.andersen.chronology.trips.repository.specification.TripSpecification;
 import com.andersen.chronology.trips.service.TripService;
@@ -30,7 +31,8 @@ public class TripServiceImpl implements TripService {
     @Override
     @Transactional(readOnly = true)
     public TripEntity getTripById(Long id) {
-        return tripRepository.findById(id).orElse(null);
+        return tripRepository.findById(id)
+                .orElseThrow(() -> new TripNotFoundException(String.format("Trip with id '%s' not found.", id)));
     }
 
     @Override

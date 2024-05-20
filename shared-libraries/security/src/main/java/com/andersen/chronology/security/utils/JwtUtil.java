@@ -1,13 +1,14 @@
-package com.andersen.chronology.auth.utils;
+package com.andersen.chronology.security.utils;
 
-import com.andersen.chronology.auth.domain.Role;
-import com.andersen.chronology.auth.domain.UserEntity;
+import com.andersen.chronology.security.entities.AccountDetails;
+import com.andersen.chronology.security.entities.Role;
+import com.andersen.chronology.security.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -21,21 +22,25 @@ import java.util.Set;
 import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+    private final JwtProperties jwtProperties;
 
-    @Value("${jwt.expiration}")
-    private long jwtExpiration;
+    private final String BEARER = "Bearer ";
+    private final String USERNAME = "username";
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        return extractAllClaims(token.replace(BEARER, "")).get(USERNAME, String.class);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    public boolean isBearer(String header) {
+        return header.startsWith(BEARER);
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -44,9 +49,10 @@ public class JwtUtil {
     }
 
     public String generateToken(DefaultOidcUser oidcUser) {
-        UserEntity userDetails = new UserEntity();
-        userDetails.setUsername(oidcUser.getEmail());
-        userDetails.setRoles(Set.of(Role.USER));
+        AccountDetails userDetails = AccountDetails.builder()
+                .username(oidcUser.getEmail())
+                .roles(Set.of(Role.USER))
+                .build();
 
         return generateToken(getStringObjectMap(userDetails), userDetails);
     }
@@ -62,7 +68,7 @@ public class JwtUtil {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
-        return "Bearer " + buildToken(extraClaims, userDetails, jwtExpiration);
+        return "Bearer " + buildToken(extraClaims, userDetails, jwtProperties.getJwtExpiration());
     }
 
 
@@ -103,7 +109,7 @@ public class JwtUtil {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

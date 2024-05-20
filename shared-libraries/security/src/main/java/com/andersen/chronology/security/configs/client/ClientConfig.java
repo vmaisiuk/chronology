@@ -1,4 +1,4 @@
-package com.andersen.chronology.trips.config;
+package com.andersen.chronology.security.configs.client;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.ssl.SslContext;
@@ -17,7 +17,7 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-public class AppConfig {
+public class ClientConfig {
 
     @Bean
     WebClient webClient(WebClient.Builder builder) throws Exception {

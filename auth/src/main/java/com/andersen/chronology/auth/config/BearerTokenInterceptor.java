@@ -1,6 +1,6 @@
 package com.andersen.chronology.auth.config;
 
-import com.andersen.chronology.auth.utils.JwtUtil;
+import com.andersen.chronology.security.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

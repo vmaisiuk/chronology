@@ -20,7 +20,3 @@ spring:
 springdoc:
   swagger-ui:
     path: /swagger-ui-custom.html
-
-jwt:
-  secret: my32CharacterUltraSecureAndUltraLongSecretKey
-  expiration: 86400000

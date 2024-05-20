@@ -1,7 +1,7 @@
 package com.andersen.chronology.auth.config;
 
 import com.andersen.chronology.auth.repository.UserRepository;
-import com.andersen.chronology.auth.utils.JwtUtil;
+import com.andersen.chronology.security.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +28,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // Get authorization header and validate
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.isEmpty(header) || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);

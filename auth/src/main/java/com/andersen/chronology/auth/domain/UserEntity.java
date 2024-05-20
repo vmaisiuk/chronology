@@ -1,5 +1,6 @@
 package com.andersen.chronology.auth.domain;
 
+import com.andersen.chronology.security.entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class UserEntity implements UserDetails {
     private String googleName;
     private String googleUsername;
     private Set<Role> roles;
+    private String token;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

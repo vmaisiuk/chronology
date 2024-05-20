@@ -1,6 +1,7 @@
 package com.andersen.chronology.auth.service.impl;
 
 import com.andersen.chronology.auth.domain.UserEntity;
+import com.andersen.chronology.auth.exception.UserNotFoundException;
 import com.andersen.chronology.auth.repository.UserRepository;
 import com.andersen.chronology.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails registerUser(UserEntity request) {
         request.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
+        request.setToken(getToken());
         return userRepository.save(request);
+    }
+
+    @Override
+    public UserEntity getUser(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(String.format("User with name '%s' not found.", username)));
+    }
+
+    private String getToken() {
+        return "token from firebase";
     }
 }
